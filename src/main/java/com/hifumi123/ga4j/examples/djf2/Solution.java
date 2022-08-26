@@ -6,16 +6,16 @@ import java.io.IOException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import com.hifumi123.ga4j.ElitistModelGeneticAlgorithm;
 import com.hifumi123.ga4j.Evaluator;
 import com.hifumi123.ga4j.IndividualGenerator;
+import com.hifumi123.ga4j.SimpleGeneticAlgorithm;
 import com.hifumi123.ga4j.crossover.CrossoverOperator;
 import com.hifumi123.ga4j.crossover.OnePointCrossover;
 import com.hifumi123.ga4j.examples.BinaryChromosomeGenerator;
 import com.hifumi123.ga4j.examples.ChromosomeGenerator;
 import com.hifumi123.ga4j.mutation.MutationOperator;
 import com.hifumi123.ga4j.mutation.SimpleMutation;
-import com.hifumi123.ga4j.selection.ProportionalModelSelection;
+import com.hifumi123.ga4j.selection.ElitistProportionalModelSelection;
 import com.hifumi123.ga4j.selection.SelectionOperator;
 
 /**
@@ -29,40 +29,8 @@ import com.hifumi123.ga4j.selection.SelectionOperator;
  *
  */
 public class Solution {
-
-	public void run() {
-		int populationSize = 80;
-		int maxGeneration = 200;
-		double probabilityOfCrossover = 0.6;
-		double probabilityOfMutation = 0.001;
-		
-		ChromosomeGenerator chromosomeGenerator = new BinaryChromosomeGenerator(20);
-		IndividualGenerator individualGenerator = new CustomIndividualGenerator(chromosomeGenerator);
-		Evaluator evaluator = new CustomEvaluator();
-		
-		SelectionOperator selection = new ProportionalModelSelection();
-		CrossoverOperator crossover = new OnePointCrossover();
-		MutationOperator mutation = new SimpleMutation();
-		
-		CustomDataCollector dataCollector = new CustomDataCollector(maxGeneration);
-		
-		ElitistModelGeneticAlgorithm ga = new ElitistModelGeneticAlgorithm(populationSize, maxGeneration, probabilityOfCrossover, probabilityOfMutation, individualGenerator, evaluator, selection, crossover, mutation);
-		ga.setDataCollector(dataCollector);
-		long startTime = System.currentTimeMillis();
-		ga.run();
-		long duration = System.currentTimeMillis() - startTime;
-		
-		CustomIndividual individual = (CustomIndividual) ga.getBestIndividual();
-		
-		System.out.println("Population Size: " + populationSize);
-		System.out.println("Max Generation: " + maxGeneration);
-		System.out.println("Probability Of Crossover: " + probabilityOfCrossover);
-		System.out.println("Probability Of Mutation: " + probabilityOfMutation);
-		System.out.println("Duration: " + duration + " ms");
-		System.out.println("X1 = " + individual.decodeX1());
-		System.out.println("X2 = " + individual.decodeX2());
-		System.out.println("Fitness = " + individual.getFitness());
-		
+	
+	private void writeResultFile(CustomDataCollector dataCollector) {
 		String fitnessesFilepath = "Fitnesses.csv";
 		
 		try {
@@ -75,6 +43,40 @@ public class Solution {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void run() {
+		int populationSize = 80;
+		int maxGeneration = 200;
+		double probabilityOfCrossover = 0.6;
+		double probabilityOfMutation = 0.001;
+		
+		ChromosomeGenerator chromosomeGenerator = new BinaryChromosomeGenerator(20);
+		IndividualGenerator individualGenerator = new CustomIndividualGenerator(chromosomeGenerator);
+		Evaluator evaluator = new CustomEvaluator();
+		
+		SelectionOperator selection = new ElitistProportionalModelSelection();
+		CrossoverOperator crossover = new OnePointCrossover();
+		MutationOperator mutation = new SimpleMutation();
+		
+		CustomDataCollector dataCollector = new CustomDataCollector(maxGeneration);
+		
+		SimpleGeneticAlgorithm ga = new SimpleGeneticAlgorithm(populationSize, maxGeneration, probabilityOfCrossover, probabilityOfMutation, individualGenerator, evaluator, selection, crossover, mutation);
+		ga.setDataCollector(dataCollector);
+		long startTime = System.currentTimeMillis();
+		CustomIndividual individual = (CustomIndividual) ga.run();
+		long duration = System.currentTimeMillis() - startTime;
+		
+		System.out.println("Population Size: " + populationSize);
+		System.out.println("Max Generation: " + maxGeneration);
+		System.out.println("Probability Of Crossover: " + probabilityOfCrossover);
+		System.out.println("Probability Of Mutation: " + probabilityOfMutation);
+		System.out.println("Duration: " + duration + " ms");
+		System.out.println("X1 = " + individual.decodeX1());
+		System.out.println("X2 = " + individual.decodeX2());
+		System.out.println("Fitness = " + individual.getFitness());
+		
+		writeResultFile(dataCollector);
 	}
 	
 	public static void main(String[] args) {

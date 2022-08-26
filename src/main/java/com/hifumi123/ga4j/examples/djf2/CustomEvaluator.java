@@ -16,4 +16,9 @@ public class CustomEvaluator implements Evaluator {
 
 		ci.setFitness(fitness);
 	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return this;
+	}
 }

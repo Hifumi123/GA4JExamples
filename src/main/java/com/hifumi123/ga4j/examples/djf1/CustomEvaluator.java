@@ -19,4 +19,9 @@ public class CustomEvaluator implements Evaluator {
 		//ofv 的最大值为 78.64320000000001
 		ci.setFitness(80 - ofv);
 	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return this;
+	}
 }

@@ -1,0 +1,6 @@
+0.2.0 相对 0.1.0 的改动：
+1、POM 文件中增加 maven-source-plugin 配置。
+2、适配 GA4J 0.2.0 版本。
+3、修改 djf1 的 CustomDataCollector 类、CustomEvaluator 类和 Solution 类以适配 GA4J 0.2.0 版本。
+4、修改 djf2 的 CustomDataCollector 类、CustomEvaluator 类和 Solution 类以适配 GA4J 0.2.0 版本。
+5、更新 README 文档。

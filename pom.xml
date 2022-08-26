@@ -3,14 +3,14 @@
   
   <groupId>com.hifumi123</groupId>
   <artifactId>ga4j-examples</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <name>GA4J Examples</name>
   
   <dependencies>
   	<dependency>
   		<groupId>com.hifumi123</groupId>
   		<artifactId>ga4j</artifactId>
-  		<version>0.1.0</version>
+  		<version>0.2.0</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.commons</groupId>
@@ -30,6 +30,19 @@
   				<target>1.8</target>
   				<encoding>UTF-8</encoding>
   			</configuration>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-source-plugin</artifactId>
+  			<version>3.2.1</version>
+  			<executions>
+  				<execution>
+  					<id>attach-sources</id>
+  					<goals>
+  						<goal>jar</goal>
+  					</goals>
+  				</execution>
+  			</executions>
   		</plugin>
   		<plugin>
   			<!-- 默认不需要 groupId -->

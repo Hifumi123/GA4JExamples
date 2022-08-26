@@ -3,8 +3,8 @@ package com.hifumi123.ga4j.examples.djf2;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hifumi123.ga4j.AbstractIndividual;
 import com.hifumi123.ga4j.DataCollector;
+import com.hifumi123.ga4j.Population;
 
 public class CustomDataCollector implements DataCollector {
 	
@@ -19,16 +19,16 @@ public class CustomDataCollector implements DataCollector {
 		meanFitnessList = new ArrayList<Double>(maxGeneration + 1);
 		worstFitnessList = new ArrayList<Double>(maxGeneration + 1);
 	}
-
+	
 	@Override
-	public void collectData(List<AbstractIndividual> individuals, int generation) {
-		CustomIndividual first = (CustomIndividual) individuals.get(0);
+	public void collectData(Population population, int generation) {
+		CustomIndividual first = (CustomIndividual) population.get(0);
 		double sumFitness = first.getFitness();
 		CustomIndividual best = first;
 		CustomIndividual worst = first;
 		
-		for (int i = 1; i < individuals.size(); i++) {
-			CustomIndividual ci = (CustomIndividual) individuals.get(i);
+		for (int i = 1; i < population.size(); i++) {
+			CustomIndividual ci = (CustomIndividual) population.get(i);
 			
 			if (ci.getFitness() > best.getFitness())
 				best = ci;
@@ -40,7 +40,7 @@ public class CustomDataCollector implements DataCollector {
 		}
 		
 		bestFitnessList.add(best.getFitness());
-		meanFitnessList.add(sumFitness / individuals.size());
+		meanFitnessList.add(sumFitness / population.size());
 		worstFitnessList.add(worst.getFitness());
 	}
 
